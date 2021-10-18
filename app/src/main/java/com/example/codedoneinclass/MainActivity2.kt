@@ -18,7 +18,7 @@ class MainActivity2 : AppCompatActivity() {
     lateinit var id:TextView
     lateinit var name:EditText
     lateinit var age:EditText
-
+    lateinit var prefs: SharedPreferences
     
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +60,47 @@ class MainActivity2 : AppCompatActivity() {
     fun findDB(view:View?){
         val ageFromDB = db.find(name.text.toString())
         age.setText("$ageFromDB")
+    }
+
+    fun loadPrefs(view:View?){
+        prefs = getSharedPreferences(FILE, MODE_PRIVATE)
+        Toast.makeText(this, "PREFS LOADED", Toast.LENGTH_SHORT).show()
+    }
+
+    fun printPrefs(view:View?){
+        Toast.makeText(this,
+                        "VALUE OF FIELD: ${prefs.getString("someKey", "NO VALUE SET")}",
+                        Toast.LENGTH_SHORT).show()
+    }
+
+    fun savePrefs(view:View?){
+        // first retrive an editor
+        val editor = prefs.edit()
+        editor.putString("someKey", name.text.toString())
+        editor.commit()
+
+        Toast.makeText(this, "PREFS SAVED", Toast.LENGTH_SHORT).show()
+    }
+
+    fun deleteFiledPrefs(view:View?){
+        val editor = prefs.edit()
+        editor.remove("someKey")
+        editor.commit()
+
+        Toast.makeText(this, "VALUE REMOVED FROM PREFS", Toast.LENGTH_SHORT).show()
+    }
+
+    fun DeleteEverythingPrefs(view:View?){
+        val editor = prefs.edit()
+        editor.clear()
+        editor.commit()
+
+        Toast.makeText(this, "EVERYTHING HAS BEEN DELETED", Toast.LENGTH_SHORT).show()
+    }
+
+
+    companion object{
+        private const val FILE = "MyPrefs"
     }
 
 }
